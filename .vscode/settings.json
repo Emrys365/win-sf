@@ -3,6 +3,10 @@
         "*.reg": "ini",
         "**/lib/newdesktop/*.txt": "markdown"
     },
+    "[ini]": {
+        "files.encoding": "utf16le",
+        "editor.wordWrap": "off"
+    },
     "[powershell]": {
         "files.encoding": "utf16le",
         "editor.wordWrap": "off"

@@ -11,6 +11,8 @@ if (!$PSSenderInfo) {
 
 Start-Process -Wait $pkg /S
 
+# CUSTOM:
+
 Push-SystemPath (Get-ChildItem "C:\Program Files (x86)\Vim\vim*\" -ea Stop).FullName
 
 Set-Location C:\Users\Public\Desktop\

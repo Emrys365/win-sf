@@ -1,2 +1,2 @@
-$features.addVscode = 1
-$features.addPwshProfile = 1
+$features.addProfileToPwsh = 1
+$features.enableSshAgent = 1

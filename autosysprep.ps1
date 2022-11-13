@@ -2,22 +2,23 @@
 
 Stop-Process -Name sysprep -ea 0
 
-. .\lib\load-config.ps1
+& .\lib\checkToDeployManually.ps1
+
+. .\lib\loadAllConfig.ps1
 
 function getInitScript([string]$name) {
     return [scriptblock]::Create(
-        @("cd `"$(Get-Location)`"",
-            '. lib\preload-to-feature.ps1',
+        @("cd (`$proot='$(Get-Location)')",
+            '. features\__base__.ps1',
             "cd features\$name"
         ) -join ';'
     )
 }
 
-Write-Output '==> Tweaking features'
+Write-Output '==> [features] start'
 
 foreach ($feature in Get-ChildItem .\features -Directory -Exclude _*) {
-    $name = $feature.Name
-    if ($cfg = $features[$name]) {
+    if ($cfg = $features[($name = $feature.Name)]) {
         Start-Job -Name $name -FilePath ".\features\$name\apply.ps1" -ArgumentList $cfg `
             -InitializationScript (getInitScript $name) | Out-Null
 
@@ -30,7 +31,7 @@ foreach ($feature in Get-ChildItem .\features -Directory -Exclude _*) {
     }
 }
 
-Write-Host
+Write-Output '==> [features] doing', ''
 
 function Get-JobOrWait {
     [OutputType([Management.Automation.Job])] param()
@@ -60,15 +61,13 @@ $($_.Exception.Message)
     }
 }
 
-Write-Host
+Write-Output '==> [features] end', ''
 
 try {
     if (Test-Path .\deploy) {
-        Remove-Item -Recurse -Force '.\deploy\tmp\*'
-        & .\deploy\scripts\_main.ps1
+        & .\deploy\scripts\__main__.ps1
     }
-    & .\lib\submit.ps1
-    Write-Output "==> Auto Sysprep Finished!"
+    & .\lib\submitAll.ps1
 }
 catch {
     Write-Error $_.Exception.Message

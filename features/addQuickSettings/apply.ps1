@@ -1,7 +1,7 @@
 Set-Location (mkdir -f 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Quick Settings')
 Remove-Item -Recurse -Force *
 
-$names = switch ( (Get-WinSystemLocale).Name ) {
+$names = switch ((Get-Culture).Name) {
     zh-CN {
         @{
             at_desktop         = '快速设置'

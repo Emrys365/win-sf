@@ -1,6 +1,5 @@
 /log/
-/tmp/
-/archived/
+/manual/
 /*.exe
 /*.msi
 /*.zip

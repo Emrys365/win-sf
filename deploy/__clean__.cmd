@@ -1,3 +1,3 @@
 @echo off
 cd "%~dp0"
-powershell -exec bypass -file scripts\_clean.ps1
+powershell -exec bypass -file scripts\__clean__.ps1

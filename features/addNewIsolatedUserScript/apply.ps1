@@ -1,6 +1,6 @@
 #Requires -RunAsAdministrator
 
-$target = "$(mkdir -f C:\SetupFw)\New-IsolatedUser.ps1"
+$target = "$(mkdir -f "$(Get-BasePath)\scripts")\newIsolatedUser.ps1"
 Copy-Item 'script.ps1' $target
 
 $shortcut = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\New Isolated User.lnk"

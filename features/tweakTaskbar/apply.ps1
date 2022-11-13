@@ -26,7 +26,7 @@ if ($cfg.biggerThumbnail) {
 # Only Windows 11
 if ([Environment]::OSVersion.Version.Build -ge 22000) {
     if ($cfg.optimize) {
-        $regkey = (mkdir -f 'HKLM:\SYSTEM\CurrentControlSet\Control\FeatureManagement\Overrides\4\1887869580').PSPath
+        $regkey = Get-RegItemOrNew 'HKLM:\SYSTEM\CurrentControlSet\Control\FeatureManagement\Overrides\4\1887869580'
         Set-ItemProperty $regkey EnabledState 2
         Set-ItemProperty $regkey EnabledStateOptions 0
     }
@@ -48,8 +48,8 @@ if ([Environment]::OSVersion.Version.Build -ge 22000) {
             Get-CurrentAndNewUserPaths "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
         ) TaskbarDa 0
         Set-ItemProperty (
-            mkdir -f 'HKLM:\SOFTWARE\Policies\Microsoft\Dsh'
-        ).PSPath AllowNewsAndInterests 0
+            Get-RegItemOrNew 'HKLM:\SOFTWARE\Policies\Microsoft\Dsh'
+        ) AllowNewsAndInterests 0
     }
     if ($cfg.win11noMsTeam) {
         Set-ItemProperty (

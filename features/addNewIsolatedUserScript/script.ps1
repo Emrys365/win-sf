@@ -40,7 +40,10 @@ if ((Get-ItemPropertyValue HKLM:\SYSTEM\CurrentControlSet\Control\Lsa LimitBlank
     }
 }
 Set-Localuser $username -PasswordNeverExpires $true
-Set-ItemProperty (mkdir -f 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList').PSPath $username 0
+
+$hideUsersRegPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList'
+mkdir -ea 0 $hideUsersRegPath >$null
+Set-ItemProperty (Get-Item $hideUsersRegPath).PSPath $username 0
 
 if ($onlyApp) {
     New-LocalGroup $uappGroup -ea 0 >$null
@@ -74,7 +77,7 @@ Pop-Location
 
 # Add shortcuts to desktop
 $ws = New-Object -ComObject WScript.Shell
-$pwshlink = $ws.CreateShortcut("$([Environment]::GetFolderPath("Desktop"))\PowerShell as $username(user).lnk")
+$pwshlink = $ws.CreateShortcut("$([Environment]::GetFolderPath('Desktop'))\PowerShell as $username(user).lnk")
 $pwshlink.IconLocation = "powershell.exe"
 $pwshlink.TargetPath = "%windir%\system32\cmd.exe"
 $pwshlink.WorkingDirectory = $homepath
@@ -86,7 +89,7 @@ else {
 }
 $pwshlink.Save()
 if ($onlyApp) {
-    $applink = $ws.CreateShortcut("$([Environment]::GetFolderPath("Desktop"))\EDITME as $appname(app).lnk")
+    $applink = $ws.CreateShortcut("$([Environment]::GetFolderPath('Desktop'))\EDITME as $appname(app).lnk")
     $applink.IconLocation = "%windir%\system32\shell32.dll,133"
     $applink.TargetPath = "%windir%\system32\cmd.exe"
     if ($password) {
